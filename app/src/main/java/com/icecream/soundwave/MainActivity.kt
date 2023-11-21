@@ -83,13 +83,12 @@ fun transmitterLayout(txManager: EuTxManager, modifier: Modifier = Modifier) {
 
                 if (textValue.isNotEmpty()) {
                     isSpeaking = true
-                    if (textValue.length <= 20) {
-                        // If the length is 15 or less, process the entire text
+                    if (textValue.length <= 30) {
                         txManager.euInitTransmit(textValue)
                         txManager.process(1)
                         isSpeaking = false
                     } else {
-                        val chunkSize = 20
+                        val chunkSize = 30
                         val numberOfChunks = (textValue.length + chunkSize - 1) / chunkSize
                         var currentIndex = 0
 
@@ -108,7 +107,7 @@ fun transmitterLayout(txManager: EuTxManager, modifier: Modifier = Modifier) {
                                 currentIndex++
 
                                 // Post a delayed message to process the next chunk after 8 seconds
-                                handler.postDelayed({ processNextChunk() }, 8000)
+                                handler.postDelayed({ processNextChunk() }, 7000)
                                 isSpeaking = false
                             }
                         }
@@ -150,7 +149,6 @@ fun receiverLayout(rxManager: EuRxManager, modifier: Modifier = Modifier) {
                     rxManager.setAcousticSensor(AcousticSensor {
                         receivedText = receivedText + it
                         rxManager.finish()
-                        receivedText += '\n'
                         rxManager.listen() //재시작
                     })
                 } else {
